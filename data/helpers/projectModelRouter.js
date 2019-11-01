@@ -1,11 +1,12 @@
 const express = require("express");
 const dbProjectsModel = require("./projectModel");
+const dbActionModel = require("./actionModel");
 const router = express.Router();
 
 router.get("/", handleAllProjectGet);
 router.post("/", handleProjectPost);
 router.get("/:id", handleProjectByIdGet);
-router.get("/:id", handleProjectActionsGet);
+router.get("/:id/actions", handleProjectActionsGet);
 router.put("/:id", handleProjectEdit);
 router.delete("/:id", handleProjectDelete);
 
