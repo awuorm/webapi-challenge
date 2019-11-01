@@ -133,5 +133,5 @@ function ValidateProject(req, res, next) {
     });
 }
 
-module.exports.ValidateProject = ValidateProject;
+
 module.exports = router;

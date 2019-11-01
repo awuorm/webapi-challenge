@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const dbActionModel = require("./actionModel");
-// const dbProjectsModel = require("./projectModel");
-// const projectChecker = require("./projectModelRouter");
+const dbProjectsModel = require("./projectModel");
+//const projectChecker = require("./projectModelRouter");
 
 router.get("/:id", validateID, handleActionsGet);
-router.post("/", handleActionPost);
+router.post("/",validateProject, handleActionPost);
 router.put("/:id", validateID, handleActionEdit);
 router.delete("/:id", validateID, handleActionDelete);
 
@@ -89,28 +89,28 @@ function validateID(req, res, next) {
   }
 }
 
-// function(req, res, next) {
-//   const { id } = req.params;
-//   dbProjectsModel
-//     .get(id)
-//     .then(data => {
-//       if (data === null) {
-//         res
-//           .status(400)
-//           .json({
-//             ErrorMessage:
-//               "This project cannot be found,please provide a valid project id"
-//           });
-//       } else {
-//         console.log(data);
-//         req.project = data;
-//         next();
-//       }
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       res.status(500).json(error);
-//     });
-// }
+function validateProject (req, res, next) {
+  const id = req.body.project_id;
+  dbProjectsModel
+    .get(id)
+    .then(data => {
+      if (data === null) {
+        res
+          .status(400)
+          .json({
+            ErrorMessage:
+              "This project cannot be found,please provide a valid project id"
+          });
+      } else {
+        console.log(data);
+        req.project = data;
+        next();
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+}
 
 module.exports = router;
