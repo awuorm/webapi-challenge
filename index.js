@@ -12,3 +12,27 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+
+const express = require("express");
+const cors  = require("cors");
+const helmet = require("helmet");
+const dbProjectsModel = require("./data/helpers/projectModel");
+
+const server = express();
+
+const port = process.env.PORT || 4000;
+
+server.use(helmet());
+server.use(express.json());
+server.use(cors());
+
+
+server.get("*",handleDefaultRequest);
+
+function handleDefaultRequest(req,res) {
+    res.json("Hello from  sprint challenge server");
+}
+
+server.listen(port, () => {
+    console.log("listening on port" + port);
+})
