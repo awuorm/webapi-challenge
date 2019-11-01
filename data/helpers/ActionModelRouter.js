@@ -1,24 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const dbActionModel = require("./actionModel");
+// const dbProjectsModel = require("./projectModel");
+// const projectChecker = require("./projectModelRouter");
 
-router.get("/", handleActionsGet);
+router.get("/:id", validateID, handleActionsGet);
 router.post("/", handleActionPost);
-router.put("/:id", handleActionEdit);
-router.delete("/:id", handleActionDelete);
+router.put("/:id", validateID, handleActionEdit);
+router.delete("/:id", validateID, handleActionDelete);
 
 function handleActionDelete(req, res) {
   const { id } = req.params;
   dbActionModel
     .remove(id)
     .then(data => {
-        console.log("hello from actionmodels", data);
-        res.status(200).json(data);
+      console.log("hello from actionmodels", data);
+      res.status(200).json(data);
     })
     .catch(error => {
-        console.log("hello from actionmodels", error);
-        res.status(500).json(error);
-    })
+      console.log("hello from actionmodels", error);
+      res.status(500).json(error);
+    });
 }
 
 function handleActionEdit(req, res) {
@@ -73,5 +75,42 @@ function handleActionsGet(req, res) {
       res.status(500).json(error);
     });
 }
+
+//custom middleware
+
+function validateID(req, res, next) {
+  const { id } = req.params;
+  if (Number(id)) {
+    next();
+  } else {
+    res
+      .status(400)
+      .json({ Error: "Please provide a valid id,an id can only be a number" });
+  }
+}
+
+// function(req, res, next) {
+//   const { id } = req.params;
+//   dbProjectsModel
+//     .get(id)
+//     .then(data => {
+//       if (data === null) {
+//         res
+//           .status(400)
+//           .json({
+//             ErrorMessage:
+//               "This project cannot be found,please provide a valid project id"
+//           });
+//       } else {
+//         console.log(data);
+//         req.project = data;
+//         next();
+//       }
+//     })
+//     .catch(error => {
+//       console.log(error);
+//       res.status(500).json(error);
+//     });
+// }
 
 module.exports = router;
